@@ -29,15 +29,15 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">spy cat agency</h1>
-          <p className="mt-2 text-gray-600">manage spy cats</p>
+    <main className="min-h-screen bg-slate-900 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold text-slate-100">spy cat agency</h1>
+          <p className="mt-2 text-slate-400">manage spy cats</p>
         </div>
 
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          <div className="mb-6 bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg">
             {error}
           </div>
         )}
@@ -50,7 +50,7 @@ export default function Home() {
           <div className="lg:col-span-2">
             {loading ? (
               <div className="text-center py-12">
-                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"></div>
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-slate-400 border-r-transparent"></div>
               </div>
             ) : (
               <SpyCatList cats={cats} onUpdate={loadCats} />
