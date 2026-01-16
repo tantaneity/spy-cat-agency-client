@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { SpyCat } from "@/types/spy-cat";
 import { spyCatApi, ApiError } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { ErrorMessage } from "@/components/ui/error-message";
 
 interface SpyCatItemProps {
   cat: SpyCat;
@@ -60,11 +62,7 @@ export function SpyCatItem({ cat, onUpdate }: SpyCatItemProps) {
 
   return (
     <div className="px-6 py-4 hover:bg-slate-700/50 transition-colors">
-      {error && (
-        <div className="mb-2 bg-red-900/50 border border-red-500 text-red-200 px-3 py-2 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+      <ErrorMessage message={error} />
 
       <div className="flex items-center justify-between">
         <div className="flex-1">
@@ -82,20 +80,12 @@ export function SpyCatItem({ cat, onUpdate }: SpyCatItemProps) {
                   onChange={(e) => setSalary(parseFloat(e.target.value) || 0)}
                   className="px-2 py-1 bg-slate-700 border border-slate-600 rounded w-32 text-slate-100"
                 />
-                <button
-                  onClick={handleUpdate}
-                  disabled={loading}
-                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
-                >
+                <Button onClick={handleUpdate} disabled={loading} className="px-3 py-1">
                   save
-                </button>
-                <button
-                  onClick={handleCancel}
-                  disabled={loading}
-                  className="px-3 py-1 bg-slate-600 text-slate-200 text-sm rounded hover:bg-slate-500 transition-colors disabled:opacity-50"
-                >
+                </Button>
+                <Button variant="secondary" onClick={handleCancel} disabled={loading} className="px-3 py-1">
                   cancel
-                </button>
+                </Button>
               </div>
             ) : (
               <p>salary: ${cat.salary.toLocaleString()}</p>
@@ -106,20 +96,12 @@ export function SpyCatItem({ cat, onUpdate }: SpyCatItemProps) {
         <div className="flex items-center gap-2">
           {!isEditing && (
             <>
-              <button
-                onClick={() => setIsEditing(true)}
-                disabled={loading}
-                className="px-4 py-2 text-sm text-blue-400 hover:bg-blue-900/30 rounded transition-colors disabled:opacity-50"
-              >
+              <Button variant="ghost-blue" onClick={() => setIsEditing(true)} disabled={loading}>
                 edit salary
-              </button>
-              <button
-                onClick={handleDelete}
-                disabled={loading}
-                className="px-4 py-2 text-sm text-red-400 hover:bg-red-900/30 rounded transition-colors disabled:opacity-50"
-              >
+              </Button>
+              <Button variant="ghost-red" onClick={handleDelete} disabled={loading}>
                 delete
-              </button>
+              </Button>
             </>
           )}
         </div>

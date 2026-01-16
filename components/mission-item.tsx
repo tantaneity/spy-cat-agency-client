@@ -1,9 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Mission } from "@/types/mission";
 import { SpyCat } from "@/types/spy-cat";
-import { missionApi, spyCatApi, ApiError } from "@/lib/api";
+import { missionApi, ApiError } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Select } from "@/components/ui/select";
+import { ErrorMessage } from "@/components/ui/error-message";
 
 interface MissionItemProps {
   mission: Mission;
@@ -78,11 +81,7 @@ export function MissionItem({ mission, cats, onUpdate }: MissionItemProps) {
 
   return (
     <div className="px-6 py-4 hover:bg-slate-700/50 transition-colors">
-      {error && (
-        <div className="mb-2 bg-red-900/50 border border-red-500 text-red-200 px-3 py-2 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+      <ErrorMessage message={error} />
 
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
@@ -108,32 +107,28 @@ export function MissionItem({ mission, cats, onUpdate }: MissionItemProps) {
 
         <div className="flex items-center gap-2">
           {!mission.cat_id && !isAssigning && (
-            <button
-              onClick={() => setIsAssigning(true)}
-              disabled={loading}
-              className="px-4 py-2 text-sm text-blue-400 hover:bg-blue-900/30 rounded transition-colors disabled:opacity-50"
-            >
+            <Button variant="ghost-blue" onClick={() => setIsAssigning(true)} disabled={loading}>
               assign cat
-            </button>
+            </Button>
           )}
-          <button
+          <Button
+            variant="ghost-red"
             onClick={handleDelete}
             disabled={loading || mission.cat_id !== null}
-            className="px-4 py-2 text-sm text-red-400 hover:bg-red-900/30 rounded transition-colors disabled:opacity-50"
             title={mission.cat_id ? "cannot delete assigned mission" : "delete mission"}
           >
             delete
-          </button>
+          </Button>
         </div>
       </div>
 
       {isAssigning && (
         <div className="mb-3 p-3 bg-slate-900/50 rounded-lg border border-slate-600">
           <div className="flex items-center gap-2">
-            <select
+            <Select
               value={selectedCatId || ""}
               onChange={(e) => setSelectedCatId(Number(e.target.value))}
-              className="flex-1 px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100"
+              className="flex-1"
             >
               <option value="">select cat...</option>
               {cats.filter(cat => !cat.mission).map((cat) => (
@@ -141,21 +136,17 @@ export function MissionItem({ mission, cats, onUpdate }: MissionItemProps) {
                   {cat.name} ({cat.breed})
                 </option>
               ))}
-            </select>
-            <button
-              onClick={handleAssign}
-              disabled={!selectedCatId || loading}
-              className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors disabled:opacity-50"
-            >
+            </Select>
+            <Button onClick={handleAssign} disabled={!selectedCatId || loading}>
               assign
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() => { setIsAssigning(false); setSelectedCatId(null); }}
               disabled={loading}
-              className="px-4 py-2 bg-slate-600 text-slate-200 text-sm rounded hover:bg-slate-500 transition-colors disabled:opacity-50"
             >
               cancel
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -180,17 +171,14 @@ export function MissionItem({ mission, cats, onUpdate }: MissionItemProps) {
                 )}
               </div>
               {mission.cat_id && (
-                <button
+                <Button
+                  variant={target.is_complete ? "secondary" : "primary"}
                   onClick={() => handleToggleTargetComplete(target.id, target.is_complete)}
                   disabled={loading}
-                  className={`px-3 py-1 text-xs rounded transition-colors disabled:opacity-50 ${
-                    target.is_complete
-                      ? 'bg-slate-600 text-slate-300 hover:bg-slate-500'
-                      : 'bg-green-600 text-white hover:bg-green-700'
-                  }`}
+                  className={`px-3 py-1 text-xs ${!target.is_complete && 'bg-green-600 hover:bg-green-700'}`}
                 >
                   {target.is_complete ? 'reopen' : 'complete'}
-                </button>
+                </Button>
               )}
             </div>
           </div>

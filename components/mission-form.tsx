@@ -3,6 +3,10 @@
 import { useState } from "react";
 import { MissionCreate, TargetCreate } from "@/types/mission";
 import { missionApi, ApiError } from "@/lib/api";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ErrorMessage } from "@/components/ui/error-message";
 
 interface MissionFormProps {
   onSuccess: () => void;
@@ -64,11 +68,7 @@ export function MissionForm({ onSuccess }: MissionFormProps) {
     <div className="bg-slate-800 rounded-lg shadow-xl p-6 border border-slate-700">
       <h2 className="text-xl font-semibold mb-4 text-slate-100">create new mission</h2>
       
-      {error && (
-        <div className="mb-4 bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
+      <ErrorMessage message={error} />
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -103,29 +103,29 @@ export function MissionForm({ onSuccess }: MissionFormProps) {
                   )}
                 </div>
 
-                <input
+                <Input
                   type="text"
                   placeholder="name"
                   required
                   value={target.name}
                   onChange={(e) => updateTarget(index, "name", e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="text-sm"
                 />
 
-                <input
+                <Input
                   type="text"
                   placeholder="country"
                   required
                   value={target.country}
                   onChange={(e) => updateTarget(index, "country", e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="text-sm"
                 />
 
-                <textarea
+                <Textarea
                   placeholder="notes (optional)"
                   value={target.notes}
                   onChange={(e) => updateTarget(index, "notes", e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
+                  className="text-sm"
                   rows={2}
                 />
               </div>
@@ -133,13 +133,9 @@ export function MissionForm({ onSuccess }: MissionFormProps) {
           </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        <Button type="submit" disabled={loading} className="w-full">
           {loading ? "creating..." : "create mission"}
-        </button>
+        </Button>
       </form>
     </div>
   );
