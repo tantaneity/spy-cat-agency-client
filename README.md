@@ -2,6 +2,8 @@
 
 next.js frontend for managing spy cats
 
+![screenshot](public/screenshots/app.png)
+
 ## tech stack
 
 - next.js 16
