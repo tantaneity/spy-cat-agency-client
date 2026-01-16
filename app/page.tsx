@@ -7,6 +7,7 @@ import { spyCatApi, missionApi } from "@/lib/api";
 import { SpyCatList } from "@/components/spy-cat-list";
 import { SpyCatForm } from "@/components/spy-cat-form";
 import { MissionList } from "@/components/mission-list";
+import { MissionForm } from "@/components/mission-form";
 
 export default function Home() {
   const [cats, setCats] = useState<SpyCat[]>([]);
@@ -50,8 +51,9 @@ export default function Home() {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-8">
             <SpyCatForm onSuccess={loadData} />
+            <MissionForm onSuccess={loadData} />
           </div>
 
           <div className="lg:col-span-2">
