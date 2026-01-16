@@ -23,6 +23,11 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const spyCatApi = {
+  async getBreeds(): Promise<string[]> {
+    const response = await fetch(`${API_URL}/cats/breeds`);
+    return handleResponse(response);
+  },
+
   async getAll(): Promise<SpyCat[]> {
     const response = await fetch(`${API_URL}/cats`);
     return handleResponse(response);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SpyCatCreate } from "@/types/spy-cat";
 import { spyCatApi, ApiError } from "@/lib/api";
 
@@ -9,6 +9,8 @@ interface SpyCatFormProps {
 }
 
 export function SpyCatForm({ onSuccess }: SpyCatFormProps) {
+  const [breeds, setBreeds] = useState<string[]>([]);
+  const [loadingBreeds, setLoadingBreeds] = useState(true);
   const [formData, setFormData] = useState<SpyCatCreate>({
     name: "",
     years_of_experience: 0,
@@ -17,6 +19,20 @@ export function SpyCatForm({ onSuccess }: SpyCatFormProps) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadBreeds = async () => {
+      try {
+        const data = await spyCatApi.getBreeds();
+        setBreeds(data);
+      } catch (err) {
+        console.error("failed to load breeds:", err);
+      } finally {
+        setLoadingBreeds(false);
+      }
+    };
+    loadBreeds();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,13 +96,20 @@ export function SpyCatForm({ onSuccess }: SpyCatFormProps) {
           <label className="block text-sm font-medium text-slate-300 mb-1">
             breed
           </label>
-          <input
-            type="text"
+          <select
             required
             value={formData.breed}
             onChange={(e) => setFormData({ ...formData, breed: e.target.value })}
-            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+            disabled={loadingBreeds}
+            className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50"
+          >
+            <option value="">select breed...</option>
+            {breeds.map((breed) => (
+              <option key={breed} value={breed}>
+                {breed}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
