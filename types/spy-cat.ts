@@ -4,6 +4,7 @@ export interface SpyCat {
   years_of_experience: number;
   breed: string;
   salary: number;
+  mission?: { id: number };
 }
 
 export interface SpyCatCreate {

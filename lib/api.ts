@@ -1,4 +1,5 @@
 import { SpyCat, SpyCatCreate, SpyCatUpdate } from "@/types/spy-cat";
+import { Mission, MissionCreate, MissionAssignCat, TargetUpdate } from "@/types/mission";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -59,6 +60,52 @@ export const spyCatApi = {
   async delete(id: number): Promise<void> {
     const response = await fetch(`${API_URL}/cats/${id}`, {
       method: "DELETE",
+    });
+    return handleResponse(response);
+  },
+};
+
+export const missionApi = {
+  async getAll(): Promise<Mission[]> {
+    const response = await fetch(`${API_URL}/missions`);
+    return handleResponse(response);
+  },
+
+  async getById(id: number): Promise<Mission> {
+    const response = await fetch(`${API_URL}/missions/${id}`);
+    return handleResponse(response);
+  },
+
+  async create(data: MissionCreate): Promise<Mission> {
+    const response = await fetch(`${API_URL}/missions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+  },
+
+  async delete(id: number): Promise<void> {
+    const response = await fetch(`${API_URL}/missions/${id}`, {
+      method: "DELETE",
+    });
+    return handleResponse(response);
+  },
+
+  async assignCat(missionId: number, data: MissionAssignCat): Promise<Mission> {
+    const response = await fetch(`${API_URL}/missions/${missionId}/assign`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return handleResponse(response);
+  },
+
+  async updateTarget(targetId: number, data: TargetUpdate): Promise<Mission> {
+    const response = await fetch(`${API_URL}/missions/targets/${targetId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
     return handleResponse(response);
   },

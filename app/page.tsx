@@ -2,30 +2,37 @@
 
 import { useState, useEffect } from "react";
 import { SpyCat } from "@/types/spy-cat";
-import { spyCatApi } from "@/lib/api";
+import { Mission } from "@/types/mission";
+import { spyCatApi, missionApi } from "@/lib/api";
 import { SpyCatList } from "@/components/spy-cat-list";
 import { SpyCatForm } from "@/components/spy-cat-form";
+import { MissionList } from "@/components/mission-list";
 
 export default function Home() {
   const [cats, setCats] = useState<SpyCat[]>([]);
+  const [missions, setMissions] = useState<Mission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadCats = async () => {
+  const loadData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await spyCatApi.getAll();
-      setCats(data);
+      const [catsData, missionsData] = await Promise.all([
+        spyCatApi.getAll(),
+        missionApi.getAll(),
+      ]);
+      setCats(catsData);
+      setMissions(missionsData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "failed to load cats");
+      setError(err instanceof Error ? err.message : "failed to load data");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadCats();
+    loadData();
   }, []);
 
   return (
@@ -44,7 +51,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <SpyCatForm onSuccess={loadCats} />
+            <SpyCatForm onSuccess={loadData} />
           </div>
 
           <div className="lg:col-span-2">
@@ -53,7 +60,10 @@ export default function Home() {
                 <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-slate-400 border-r-transparent"></div>
               </div>
             ) : (
-              <SpyCatList cats={cats} onUpdate={loadCats} />
+              <div className="space-y-8">
+                <SpyCatList cats={cats} onUpdate={loadData} />
+                <MissionList missions={missions} cats={cats} onUpdate={loadData} />
+              </div>
             )}
           </div>
         </div>
